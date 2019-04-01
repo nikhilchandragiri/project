@@ -1,0 +1,20 @@
+---
+title: "Final Project"
+author: "Nikhil Chandragiri"
+project partner: "Priya Gummadidhala"
+date: "3/31/2019"
+output: html_document
+
+# I choose this data to know the leading cause of deaths 
+# How to create graphs by using Scatter plot.
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#Source :https://catalog.data.gov/dataset/age-adjusted-death-rates-for-the-top-10-leading-causes-of-death-united-states-2013
+health <- read.csv("Nchs.csv",TRUE,",")
+health
+```
