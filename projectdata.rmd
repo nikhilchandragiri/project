@@ -1,0 +1,15 @@
+------
+title: "Project final model "
+author: "Priya Gummadi"
+Project Partner :"Nikhil chandragiri"
+date: "4/23/2019"
+output: XLS file 
+------
+
+```{r}
+Pdata<-read.csv("Drug_Poisoning_Mortality.csv",TRUE,",")
+Pdata<-data.frame(Pdata)
+Pdata<-Pdata[1:2000,1:18]
+mydata<-data.frame(na.omit(Pdata))
+mydata
+```
