@@ -29,22 +29,17 @@ val1<-lm(Deaths~Lower.Confidence.Limit.for.Crude.Rate,data=mydata)
 val1$fit
 val1$coeff
 
-x1<-mydata$Lower.Confidence.Limit.for.Crude.Rate
-new_x1<-cbind(x1,x1^2)
-new_x1
+#x1<-mydata$Lower.Confidence.Limit.for.Crude.Rate
+#new_x1<-cbind(x1,x1^2)
+#new_x1
 
-val12<-lm(Deaths~new_x1,data=mydata)
-val12$fit
-val12$coeff
-
-ggplot(data=mydata)+geom_point(aes(x=x1,y=Deaths))+
-geom_line(aes(x=x1,y=val1$fit),color="red")+
-geom_line(aes(x=x1,y=val12$fit),color="blue")+
-theme(panel.background=element_blank())
-mydata$predictedVal12<-predict(val12)
-mydata$residualVal12<-residuals(val12)
+#val12<-lm(Deaths~new_x1,data=mydata)
+#val12$fit
+#val12$coeff
+mydata$predictedVal1<-predict(val1)
+mydata$residualVal1<-residuals(val1)
  
-ggplot(mydata,aes(x= Lower.Confidence.Limit.for.Crude.Rate,y=Deaths))+geom_smooth(method=lm,se=FALSE,color="grey")+geom_segment(aes(xend= Lower.Confidence.Limit.for.Crude.Rate,yend=predictedVal12),alpha=0.2)+geom_point(aes(color=abs(residualVal12)))+scale_color_continuous(low="orange",high="green")+guides(color=FALSE)+geom_point(aes(y=predictedVal12),shape=1)
+ggplot(mydata,aes(x= Lower.Confidence.Limit.for.Crude.Rate,y=Deaths))+geom_smooth(method=lm,se=FALSE,color="grey")+geom_segment(aes(xend= Lower.Confidence.Limit.for.Crude.Rate,yend=predictedVal),alpha=0.2)+geom_point(aes(color=abs(residualVal1)))+scale_color_continuous(low="orange",high="green")+guides(color=FALSE)+geom_point(aes(y=predictedVal1),shape=1)
 theme_bw()
 ################
 #ggplot(mydata,aes(x= Upper.Confidence.Limit.for.Crude.Rate,y=Deaths))+geom_point()+geom_smooth(method=lm,se=FALSE,colour="black")
