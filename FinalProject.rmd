@@ -1,0 +1,52 @@
+------
+title: "Project final model "
+author: "Priya Gummadi"
+Project Partner :"Nikhil chandragiri"
+date: "4/23/2019"
+output: XLS file 
+------
+
+```{r}
+Pdata<-read.csv("Drug_Poisoning_Mortality.csv",TRUE,",")
+Pdata<-data.frame(Pdata)
+Pdata<-Pdata[1:2000,1:18]
+mydata<-data.frame(na.omit(Pdata))
+mydata
+str(mydata)
+###################
+ggplot(mydata,aes(x=Crude.Death.Rate,y=Deaths))+geom_point()+geom_smooth(method=lm,se=FALSE,colour="black")
+val<-lm(Deaths~Crude.Death.Rate,data=mydata)
+coef(val)
+summary(val)
+mydata$predictedVal<-predict(val)
+mydata$residualVal<-residuals(val)
+#plotting  linear regression and residual values 
+ggplot(mydata,aes(x=Crude.Death.Rate,y=Deaths))+geom_smooth(method=lm,se=FALSE,color="grey")+geom_segment(aes(xend=Crude.Death.Rate,yend=predictedVal),alpha=0.2)+geom_point(aes(color=abs(residualVal)))+scale_color_continuous(low="orange",high="green")+guides(color=FALSE)+geom_point(aes(y=predictedVal),shape=1)
+theme_bw()
+#####################
+ggplot(mydata,aes(x= Crude.Death.Rate+Lower.Confidence.Limit.for.Crude.Rate,y=Deaths))+geom_point()+geom_smooth(method=lm,se=FALSE,colour="black")
+val1<-lm(Deaths~Crude.Death.Rate+Lower.Confidence.Limit.for.Crude.Rate,data=mydata)
+val1$fit
+val1$coeff
+
+mydata$predictedVal1<-predict(val1)
+mydata$residualVal1<-residuals(val1)
+ 
+ggplot(mydata,aes(x= Crude.Death.Rate+Lower.Confidence.Limit.for.Crude.Rate,y=Deaths))+geom_smooth(method=lm,se=FALSE,color="grey")+geom_segment(aes(xend= Lower.Confidence.Limit.for.Crude.Rate,yend=predictedVal),alpha=0.2)+geom_point(aes(color=abs(residualVal1)))+scale_color_continuous(low="orange",high="green")+guides(color=FALSE)+geom_point(aes(y=predictedVal1),shape=1)
+theme_bw()
+#####################
+ggplot(mydata,aes(x= Crude.Death.Rate+Lower.Confidence.Limit.for.Crude.Rate+Upper.Confidence.Limit.for.Crude.Rate,y=Deaths))+geom_point()+geom_smooth(method=lm,se=FALSE,colour="black")
+
+val2<-lm(Deaths~Crude.Death.Rate+Lower.Confidence.Limit.for.Crude.Rate+Upper.Confidence.Limit.for.Crude.Rate,data=mydata)
+coef(val2)
+summary(val2)
+mydata$predictedVal2<-predict(val2)
+mydata$residualVal2<-residuals(val2)
+
+
+#plotting  linear regression and residual values 
+ggplot(mydata,aes(x=Crude.Death.Rate+Lower.Confidence.Limit.for.Crude.Rate+ Upper.Confidence.Limit.for.Crude.Rate,y=Deaths))+geom_smooth(method=lm,se=FALSE,color="grey")+geom_segment(aes(xend= Crude.Death.Rate+Lower.Confidence.Limit.for.Crude.Rate+Upper.Confidence.Limit.for.Crude.Rate,yend=predictedVal2),alpha=0.2)+geom_point(aes(color=abs(residualVal2)))+scale_color_continuous(low="orange",high="green")+guides(color=FALSE)+geom_point(aes(y=predictedVal2),shape=1)
+theme_bw()
+
+```
+
