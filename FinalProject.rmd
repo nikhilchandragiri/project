@@ -45,8 +45,6 @@ mydata$residualVal2<-residuals(val2)
 
 
 #plotting  linear regression and residual values 
-ggplot(mydata,aes(x=Crude.Death.Rate+Lower.Confidence.Limit.for.Crude.Rate+ Upper.Confidence.Limit.for.Crude.Rate,y=Deaths))+geom_smooth(method=lm,se=FALSE,color="grey")+geom_segment(aes(xend= Crude.Death.Rate+Lower.Confidence.Limit.for.Crude.Rate+Upper.Confidence.Limit.for.Crude.Rate,yend=predictedVal2),alpha=0.2)+geom_point(aes(color=abs(residualVal2)))+scale_color_continuous(low="orange",high="green")+guides(color=FALSE)+geom_point(aes(y=predictedVal2),shape=1)
+ggplot(mydata,aes(x=Crude.Death.Rate+Lower.Confidence.Limit.for.Crude.Rate+ Upper.Confidence.Limit.for.Crude.Rate,y=residualVal2))+geom_smooth(method=lm,se=FALSE,color="grey")+geom_segment(aes(xend= Crude.Death.Rate+Lower.Confidence.Limit.for.Crude.Rate+Upper.Confidence.Limit.for.Crude.Rate,yend=residualVal2),alpha=0.2)+geom_point(aes(color=abs(residualVal2)))+scale_color_continuous(low="orange",high="green")+guides(color=FALSE)+geom_point(aes(y=predictedVal2),shape=1)
 theme_bw()
-
 ```
-
