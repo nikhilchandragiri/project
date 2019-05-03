@@ -1,0 +1,80 @@
+Server:
+
+#Our prject drug_poisoning Mortality.In this overalldeaths are calcuklated depending on 
+#crude death rate,lower confidence linit and upper confidence limit. 
+#By taking the above mentioned 3 variables as predictor . the value of dependent variable is found.
+# 3 models are craeted one with single variable finding relation between dependent and independent variables.
+#2nd model using 2 variables, this is also caled as multivariable regression.
+#3rd model using 3 variables. Here in the third we took all the 3 predictors in order to calculate Deaths.
+# Developed shiny app using shiny package, making available sliders in order to amke interactive by using renderPlot()
+
+shinyServer(
+  function(input,output){
+    
+    
+    
+    model<-lm(Deaths~Crude.Death.Rate+Lower.Confidence.Limit.for.Crude.Rate+Upper.Confidence.Limit.for.Crude.Rate,data=mydata)
+    
+    modelpredicted<-reactive({
+      deathInput1<- input$bin1
+      deathInput2<-input$bin2
+      deathInput3<-input$bin3
+      
+      predict(model, newdata=data.frame(Crude.Death.Rate=deathInput1,
+                                        Lower.Confidence.Limit.for.Crude.Rate=deathInput2,
+                                        Upper.Confidence.Limit.for.Crude.Rate=deathInput3))
+      
+      
+    })
+    
+    deaths<- reactive({
+      
+      deathInput1<- input$bin1
+      deathInput2<-input$bin2
+      deathInput3<-input$bin3
+    })
+    
+    output$my_plot<-renderPlot(
+      
+      ggplot(mydata,aes(x=Crude.Death.Rate+Lower.Confidence.Limit.for.Crude.Rate+ Upper.Confidence.Limit.for.Crude.Rate,y=residualVal2))+
+        geom_smooth(method=lm,se=FALSE,color="grey")+
+        geom_segment(aes(xend= Crude.Death.Rate+Lower.Confidence.Limit.for.Crude.Rate+Upper.Confidence.Limit.for.Crude.Rate,yend=residualVal2),alpha=0.2)+
+        geom_point(aes(color=abs(residualVal2)))+scale_color_continuous(low="orange",high="green")+guides(color=FALSE)+geom_point(aes(y=predictedVal2),shape=1)+
+        geom_point(aes(x=deaths(),y=0),color="blue",size=6)
+    )
+    
+    output$Predicted<- renderText(
+      
+      modelpredicted()
+    )
+  }
+)
+
+UI:
+
+library(shiny)
+
+shinyUI(fluidPage(
+  
+  
+  sidebarLayout(
+    sidebarPanel(
+      h1("Finding Death rate "),
+      
+      
+      sliderInput("bin1","change the value",min=-1000,max=1000,value=10,step=10),
+      sliderInput("bin2","change the value",min=-1000,max=1000,value=10,step =10),
+      sliderInput("bin3","change the value",min=-1000,max=1000,value=10,step=10)
+      
+    ),
+    mainPanel(
+      
+      plotOutput("my_plot"),
+      h3("predicted value"),
+      textOutput("Predicted")
+      
+      
+    )
+  )
+  
+))
